@@ -12,8 +12,8 @@ app = Flask(__name__)
 
 CV_MODEL_URL = 'http://172.20.10.14:5555/predict'  # todo CHANGE ME!
 
-GOOGLE_TRANSLATER_API_KEY = 'AIzaSyBkC-EzKR-XtJzJgihWnXKfmhMCPDQgIks'
-GOOGLE_TRANSLATER_URL = 'https://translation.googleapis.com/language/translate/v2'
+GOOGLE_TRANSLATOR_API_KEY = 'AIzaSyBkC-EzKR-XtJzJgihWnXKfmhMCPDQgIks'
+GOOGLE_TRANSLATOR_URL = 'https://translation.googleapis.com/language/translate/v2'
 DETECT_URL = '/image/recognize/detect-objects'
 
 FOREIGN_LANG_JSON_FIELD_NAME = 'foreign_lang'
@@ -29,9 +29,9 @@ IMAGE_JSON_FIELD_NAME = 'imageFile'
 
 
 def translate_request(text: List[str], target_language: str) -> List[str]:
-    response = requests.post(GOOGLE_TRANSLATER_URL,
+    response = requests.post(GOOGLE_TRANSLATOR_URL,
                              json={'q': text, 'target': target_language},
-                             params={'key': GOOGLE_TRANSLATER_API_KEY})
+                             params={'key': GOOGLE_TRANSLATOR_API_KEY})
     json_response = response.json()
     translate_list = []
     for element in json_response.get('data').get('translations'):
@@ -76,6 +76,7 @@ def detect_objects():
     response = requests.post(CV_MODEL_URL,
                              files={IMAGE_JSON_FIELD_NAME: ("imageFile.jpg", file, 'multipart/form-data', {'Expires': '0'})})
     json_response = response.json()
+
     if bool(json_response.get('Successful')):
         # Запрос к Google Translation API
         objects_name = []
